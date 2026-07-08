@@ -1,0 +1,32 @@
+{
+  "source": "“MODIS”卫星文献挖掘：主题、趋势与情感分析.docx",
+  "extractionOrder": [
+    "figure1-corpus-trend.png",
+    "figure1-journal-distribution.png",
+    "figure2-cluster1-secondary.png",
+    "figure2-cluster2-secondary.png",
+    "figure2-cluster3-secondary.png",
+    "figure2-cluster4-secondary.png",
+    "figure2-cluster5-secondary.png",
+    "figure3-2001-2005.png",
+    "figure3-2006-2010.png",
+    "figure3-2011-2015.png",
+    "figure3-2016-2020.png",
+    "figure3-2021-2025.png",
+    "figure4-cluster1-wordcloud.png",
+    "figure4-cluster2-wordcloud.png",
+    "figure4-cluster3-wordcloud.png",
+    "figure4-cluster4-wordcloud.png",
+    "figure4-cluster5-wordcloud.png",
+    "figure5-cluster1-negative.png",
+    "figure5-cluster1-positive.png",
+    "figure5-cluster2-negative.png",
+    "figure5-cluster2-positive.png",
+    "figure5-cluster3-negative.png",
+    "figure5-cluster3-positive.png",
+    "figure5-cluster4-negative.png",
+    "figure5-cluster4-positive.png",
+    "figure5-cluster5-negative.png",
+    "figure5-cluster5-positive.png"
+  ]
+}

@@ -1,0 +1,13 @@
+node_modules/
+.idea/
+dist/
+build2/
+output/
+.playwright-cli/
+verification-artifacts/
+
+*.log
+vite-*.log
+
+earth*.png
+tmp-*.png
