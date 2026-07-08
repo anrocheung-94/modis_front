@@ -2,7 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  CLUSTERED_POINT_RADIUS_SCALE,
   CLUSTERING_TRANSITION_SECONDS,
+  getClusteredPointMotion,
   getClusterTransitionPosition,
 } from "../src/model/clusterTransition.js";
 
@@ -39,4 +41,26 @@ test("curved cluster transition midpoint bends away from linear interpolation", 
 
   assert.ok(Math.abs(midpoint.x - linearMidpoint.x) > 8);
   assert.ok(Math.abs(midpoint.y - linearMidpoint.y) > 8);
+});
+
+test("clustered point motion adds subtle liveness in normal motion", () => {
+  const motionA = getClusteredPointMotion(samplePoint, 1000, false);
+  const motionB = getClusteredPointMotion(samplePoint, 2400, false);
+
+  assert.equal(CLUSTERED_POINT_RADIUS_SCALE, 1.12);
+  assert.ok(Math.abs(motionA.driftX) > 0.01 || Math.abs(motionA.driftY) > 0.01);
+  assert.notEqual(motionA.radiusScale, motionB.radiusScale);
+  assert.ok(motionA.radiusScale > 1.07);
+  assert.ok(motionA.radiusScale < 1.18);
+  assert.ok(motionA.alphaScale > 0.92);
+  assert.ok(motionA.alphaScale < 1.09);
+});
+
+test("clustered point motion is static for reduced motion users", () => {
+  assert.deepEqual(getClusteredPointMotion(samplePoint, 1000, true), {
+    driftX: 0,
+    driftY: 0,
+    radiusScale: CLUSTERED_POINT_RADIUS_SCALE,
+    alphaScale: 1,
+  });
 });

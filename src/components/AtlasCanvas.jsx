@@ -8,6 +8,7 @@ import {
 } from "../data/homeStarReference.js";
 import {
   CLUSTERING_TRANSITION_SECONDS,
+  getClusteredPointMotion,
   getClusterTransitionPosition,
 } from "../model/clusterTransition.js";
 
@@ -107,6 +108,7 @@ export function AtlasCanvas({
         hoveredClusterId,
         reducedMotion,
         preserveHomePointAppearance,
+        phase,
       );
       drawHomeAnchorFlares(context, ambientStars, timestamp, backgroundReveal, useLayeredHomeAssets);
 
@@ -485,6 +487,7 @@ function drawSemanticPoints(
   hoveredClusterId,
   reducedMotion,
   preserveHomePointAppearance,
+  phase,
 ) {
   const colors = new Map(galaxies.map((galaxy) => [galaxy.clusterId, galaxy.color]));
   const heroBlend = 1 - clamp(reveal / 0.2, 0, 1);
@@ -501,19 +504,25 @@ function drawSemanticPoints(
       : null;
     const x = transitionPosition?.x ?? lerp(point.freeX, point.clusteredX, reveal);
     const y = transitionPosition?.y ?? lerp(point.freeY, point.clusteredY, reveal);
+    const clusteredMotion =
+      phase === "clustered-home"
+        ? getClusteredPointMotion(point, timestamp, reducedMotion)
+        : { driftX: 0, driftY: 0, radiusScale: 1, alphaScale: 1 };
     const driftScale = reducedMotion || preserveHomePointAppearance ? 0 : 0.3 + (1 - reveal) * 0.24;
-    const driftX = point.isDynamic
+    const driftX = clusteredMotion.driftX + (point.isDynamic
       ? Math.cos(timestamp * 0.0007 * point.driftAxisX + point.phase) * point.driftRadius * driftScale
-      : 0;
-    const driftY = point.isDynamic
+      : 0);
+    const driftY = clusteredMotion.driftY + (point.isDynamic
       ? Math.sin(timestamp * 0.0008 * point.driftAxisY + point.phase) * point.driftRadius * driftScale
-      : 0;
+      : 0);
     const pulse = reducedMotion || preserveHomePointAppearance
       ? 1
       : 0.8 + Math.sin(timestamp * point.pulseSpeed + point.pulsePhase) * point.pulseStrength * 0.07;
     const clusteredRadius = point.radius * pulse * (hoveredClusterId === point.clusterId ? 1.12 : 1);
     const homeRadius = point.radius * point.homeRadiusScale * pulse * 0.72;
-    const radius = preserveHomePointAppearance ? homeRadius : lerp(clusteredRadius, homeRadius, heroBlend);
+    const radius = preserveHomePointAppearance
+      ? homeRadius * clusteredMotion.radiusScale
+      : lerp(clusteredRadius, homeRadius, heroBlend);
     const clusteredColor = mixHex("#f1d1a4", clusterColor, Math.min(1, reveal * 1.08));
     const clusteredAlpha = point.isResidualGray
       ? 0.18 + point.intensity * 0.24
@@ -522,7 +531,9 @@ function drawSemanticPoints(
       ? mixHex(point.homeColor ?? "#d9c19e", clusterColor, reveal)
       : mixHex(clusteredColor, point.homeColor ?? "#d9c19e", heroBlend * 0.92);
     const homeAlpha = clamp((point.homeAlpha ?? 0.2) * 1.08 + 0.035, 0, 0.96);
-    const alpha = preserveHomePointAppearance ? homeAlpha : lerp(clusteredAlpha, homeAlpha, heroBlend);
+    const alpha = preserveHomePointAppearance
+      ? clamp(homeAlpha * clusteredMotion.alphaScale, 0, 1)
+      : lerp(clusteredAlpha, homeAlpha, heroBlend);
     const homeGlowStrength = point.homeGlowStrength ?? 0;
     const homeSharpness = point.homeSharpness ?? 0.7;
 

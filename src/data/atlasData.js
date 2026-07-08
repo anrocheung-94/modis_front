@@ -39,11 +39,17 @@ export const FUTURE_MODULES = [
   },
 ];
 
+export const CLUSTER_ACTIONS = [
+  { id: "themes", label: "主题发现" },
+  { id: "trends", label: "趋势分析" },
+  { id: "sentiment", label: "情感分析" },
+];
+
 export const HOME_SCENE = {
   brandLine: "MODIS RESEARCH ATLAS",
   homeHero: {
-    eyebrow: "MODIS RESEARCH",
     title: "MODIS Research",
+    titleClassName: "atlas__home-title--crimson",
     ctaZh: "开始探索",
     ctaEn: "Start Exploring",
     ariaLabel: "MODIS Research homepage",
@@ -51,13 +57,6 @@ export const HOME_SCENE = {
     ctaAlternates: [
       "/assets/home-cta/start-explore-apple-blue.png",
       "/assets/home-cta/start-explore-dark-pill.png",
-    ],
-    fontOptions: [
-      {
-        id: "crimson",
-        label: "Crimson Pro",
-        className: "atlas__home-title--crimson",
-      },
     ],
   },
   titleZh: ["MODIS 卫星文献宇宙", "研究主题、趋势与情感分析"],

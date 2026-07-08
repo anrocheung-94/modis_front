@@ -1,4 +1,5 @@
 export const CLUSTERING_TRANSITION_SECONDS = 2;
+export const CLUSTERED_POINT_RADIUS_SCALE = 1.12;
 
 export function getClusterTransitionPosition(point, progress) {
   const t = clamp(progress, 0, 1);
@@ -29,6 +30,30 @@ export function getClusterTransitionPosition(point, progress) {
   return {
     x: startX + dx * t + normalX * bend,
     y: startY + dy * t + normalY * bend,
+  };
+}
+
+export function getClusteredPointMotion(point, timestamp, reducedMotion) {
+  if (reducedMotion) {
+    return {
+      driftX: 0,
+      driftY: 0,
+      radiusScale: CLUSTERED_POINT_RADIUS_SCALE,
+      alphaScale: 1,
+    };
+  }
+
+  const seed = (point.pointIndex ?? 0) * 0.71 + (point.clusterId ?? 0) * 1.37;
+  const driftRadius = Math.min(2.4, Math.max(0.55, (point.driftRadius ?? 1) * 0.11));
+  const driftX = Math.cos(timestamp * 0.00023 + seed) * driftRadius;
+  const driftY = Math.sin(timestamp * 0.00019 + seed * 1.21) * driftRadius * 0.78;
+  const breath = Math.sin(timestamp * 0.00115 + seed * 0.83);
+
+  return {
+    driftX,
+    driftY,
+    radiusScale: CLUSTERED_POINT_RADIUS_SCALE + breath * 0.045,
+    alphaScale: 1 + breath * 0.055,
   };
 }
 

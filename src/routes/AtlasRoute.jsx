@@ -3,7 +3,8 @@ import gsap from "gsap";
 
 import { AtlasCanvas } from "../components/AtlasCanvas.jsx";
 import { HomeSpaceLayers } from "../components/HomeSpaceLayers.jsx";
-import { HOME_SCENE } from "../data/atlasData.js";
+import { SpaceMotionLayer } from "../components/SpaceMotionLayer.jsx";
+import { CLUSTER_ACTIONS, HOME_SCENE } from "../data/atlasData.js";
 import { useAtlas } from "../model/AtlasContext.jsx";
 import { CLUSTERING_TRANSITION_SECONDS } from "../model/clusterTransition.js";
 
@@ -23,8 +24,9 @@ export function AtlasRoute() {
 
   const isMinimalHome = state.phase === appPhases.UNCLUSTERED_HOME;
   const isTransitioning = state.phase === appPhases.CLUSTERING_TRANSITION;
+  const isClusteredHome = state.phase === appPhases.CLUSTERED_HOME;
   const isMinimalSurface =
-    isMinimalHome || isTransitioning || state.phase === appPhases.CLUSTERED_HOME;
+    isMinimalHome || isTransitioning || isClusteredHome;
 
   useEffect(() => {
     if (state.phase === appPhases.UNCLUSTERED_HOME) {
@@ -107,6 +109,7 @@ export function AtlasRoute() {
         isMinimalSurface ? "atlas--minimal-surface" : "",
       ].filter(Boolean).join(" ")}
     >
+      {isMinimalSurface ? <SpaceMotionLayer phase={state.phase} reducedMotion={reducedMotion} /> : null}
       {isMinimalSurface ? <HomeSpaceLayers stage="back" /> : null}
 
       <AtlasCanvas
@@ -132,16 +135,10 @@ export function AtlasRoute() {
           className="atlas__home-hero"
           aria-label={HOME_SCENE.homeHero.ariaLabel}
         >
-          <p className="atlas__home-kicker">{HOME_SCENE.homeHero.eyebrow}</p>
           <div className="atlas__home-title-stack">
-            {HOME_SCENE.homeHero.fontOptions.map((option) => (
-              <section key={option.id} className="atlas__home-title-option">
-                <span className="atlas__home-font-label">{option.label}</span>
-                <h1 className={`atlas__home-title ${option.className}`}>
-                  {HOME_SCENE.homeHero.title}
-                </h1>
-              </section>
-            ))}
+            <h1 className={`atlas__home-title ${HOME_SCENE.homeHero.titleClassName}`}>
+              {HOME_SCENE.homeHero.title}
+            </h1>
           </div>
           <button
             ref={clusterRef}
@@ -160,6 +157,21 @@ export function AtlasRoute() {
             <span className="atlas__home-cta-text">{HOME_SCENE.homeHero.ctaZh}</span>
           </button>
         </header>
+      ) : null}
+
+      {isClusteredHome ? (
+        <nav className="atlas__cluster-actions" aria-label="Primary MODIS analysis entrances">
+          {CLUSTER_ACTIONS.map((action) => (
+            <button
+              key={action.id}
+              type="button"
+              className="atlas__cluster-action"
+              aria-label={action.label}
+            >
+              {action.label}
+            </button>
+          ))}
+        </nav>
       ) : null}
     </main>
   );

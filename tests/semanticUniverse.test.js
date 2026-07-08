@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { APP_META, HOME_SCENE, VIEWBOX } from "../src/data/atlasData.js";
+import { APP_META, CLUSTER_ACTIONS, HOME_SCENE, VIEWBOX } from "../src/data/atlasData.js";
+import { SPACE_MOTION_SCENES } from "../src/data/spaceMotion.js";
 import {
   SCATTER_POINT_BUDGET,
   PRIMARY_CLUSTER_COUNT,
@@ -33,8 +34,9 @@ test("homepage scene config keeps observation console truth values centralized",
 
   assert.equal(homeHero.title, "MODIS Research");
   assert.equal(homeHero.ctaZh, "开始探索");
-  assert.equal(homeHero.fontOptions.length, 1);
-  assert.equal(homeHero.fontOptions[0].id, "crimson");
+  assert.equal(homeHero.eyebrow, undefined);
+  assert.equal(homeHero.fontOptions, undefined);
+  assert.equal(homeHero.titleClassName, "atlas__home-title--crimson");
   assert.ok(homeHero.ctaAsset.includes("/assets/home-cta/start-explore-"));
   assert.equal(observationConsole.rows[0].value, APP_META.corpusSentences.toLocaleString());
   assert.equal(observationConsole.rows[1].value, APP_META.publicationCount.toLocaleString());
@@ -43,6 +45,25 @@ test("homepage scene config keeps observation console truth values centralized",
   assert.equal(observationConsole.rows[4].captionEn, "12 primary clusters");
   assert.equal(clusterConsole.actionEn, "Start Level-1 Clustering");
   assert.equal(hud[0].value, `${APP_META.pointBudget.toLocaleString()} points`);
+});
+
+test("clustered home exposes the three minimal primary analysis actions", () => {
+  assert.deepEqual(CLUSTER_ACTIONS, [
+    { id: "themes", label: "主题发现" },
+    { id: "trends", label: "趋势分析" },
+    { id: "sentiment", label: "情感分析" },
+  ]);
+});
+
+test("space motion scene config points to the generated video assets", () => {
+  assert.equal(SPACE_MOTION_SCENES.home.loop, true);
+  assert.equal(SPACE_MOTION_SCENES.home.poster, "/assets/space-motion/home-slow-voyage-poster.png");
+  assert.ok(SPACE_MOTION_SCENES.home.sources.some((source) => source.src === "/assets/space-motion/home-slow-voyage.webm"));
+  assert.ok(SPACE_MOTION_SCENES.home.sources.some((source) => source.src === "/assets/space-motion/home-slow-voyage.mp4"));
+
+  assert.equal(SPACE_MOTION_SCENES.clusterTransition.loop, false);
+  assert.ok(SPACE_MOTION_SCENES.clusterTransition.sources.some((source) => source.src === "/assets/space-motion/cluster-perspective-shift.webm"));
+  assert.ok(SPACE_MOTION_SCENES.clusterTransition.sources.some((source) => source.src === "/assets/space-motion/cluster-perspective-shift.mp4"));
 });
 
 test("unclustered homepage points follow a full deep-space field with concept-3 feature emphasis", () => {
