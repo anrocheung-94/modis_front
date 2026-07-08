@@ -359,19 +359,25 @@ button {
   display: block;
   object-fit: cover;
   transform: scale(1.035);
-  filter: saturate(0.92) brightness(0.82) contrast(1.05);
+  filter: saturate(1.04) brightness(0.94) contrast(1.1);
 }
 
 .atlas__space-motion--clusterTransition .atlas__space-motion-video {
-  filter: saturate(1.02) brightness(0.88) contrast(1.08);
+  transform: scale(1.015);
+  filter: saturate(1.12) brightness(1.02) contrast(1.14);
 }
 
 .atlas__space-motion-vignette {
   position: absolute;
   inset: 0;
+  opacity: 0.62;
   background:
-    radial-gradient(circle at 50% 44%, transparent 36%, rgba(1, 4, 12, 0.18) 76%, rgba(0, 0, 0, 0.5) 100%),
-    linear-gradient(180deg, rgba(1, 4, 12, 0.14), rgba(1, 4, 12, 0.28));
+    radial-gradient(circle at 50% 44%, transparent 38%, rgba(1, 4, 12, 0.14) 76%, rgba(0, 0, 0, 0.42) 100%),
+    linear-gradient(180deg, rgba(1, 4, 12, 0.08), rgba(1, 4, 12, 0.22));
+}
+
+.atlas__space-motion--clusterTransition .atlas__space-motion-vignette {
+  opacity: 0.42;
 }
 
 .atlas__sky-glow,
@@ -1148,13 +1154,13 @@ button {
 .atlas--minimal-home .atlas__home-space--back,
 .atlas--minimal-surface .atlas__home-space--back {
   z-index: 1;
-  opacity: 0.42;
+  opacity: 0.22;
 }
 
 .atlas--minimal-home .atlas__home-space--front,
 .atlas--minimal-surface .atlas__home-space--front {
   z-index: 3;
-  opacity: 0.62;
+  opacity: 0.34;
 }
 
 .atlas--minimal-home .atlas__home-hero,
@@ -1184,8 +1190,8 @@ button {
 .atlas--minimal-surface .atlas__sky-film {
   z-index: 4;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.008), rgba(1, 5, 12, 0.045) 18%, rgba(1, 5, 12, 0.16) 70%, rgba(1, 5, 12, 0.26) 100%),
-    radial-gradient(circle at 50% 52%, transparent 48%, rgba(0, 0, 0, 0.38) 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.006), rgba(1, 5, 12, 0.032) 18%, rgba(1, 5, 12, 0.1) 70%, rgba(1, 5, 12, 0.18) 100%),
+    radial-gradient(circle at 50% 52%, transparent 52%, rgba(0, 0, 0, 0.26) 100%);
 }
 
 .atlas--minimal-home .atlas__home-hero,
@@ -1203,7 +1209,17 @@ button {
 }
 
 .atlas--transitioning-home .atlas__home-space--back {
-  opacity: 0.72;
+  opacity: 0.08;
+}
+
+.atlas--transitioning-home .atlas__home-space--front {
+  opacity: 0.12;
+}
+
+.atlas--transitioning-home .atlas__sky-film {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.004), rgba(1, 5, 12, 0.018) 18%, rgba(1, 5, 12, 0.056) 70%, rgba(1, 5, 12, 0.1) 100%),
+    radial-gradient(circle at 50% 52%, transparent 58%, rgba(0, 0, 0, 0.16) 100%);
 }
 
 .atlas__home-hero {
